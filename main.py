@@ -1,10 +1,14 @@
 import io
 import sys
 import g4f
+import random
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from googletrans import Translator
 
+with open("startWindow.ui", encoding="utf8") as uif:
+    start_template = uif.read()
 with open("mainWindow.ui", encoding="utf8") as uif:
     template = uif.read()
 with open("endWindow.ui", encoding="utf8") as uif:
@@ -20,6 +24,44 @@ def ask_ai(question):
     return response
 
 
+def prompt(language, level, words) -> str:
+    return f"""Generate a new {language} text that will contain {random.randint(250, 340)}-{random.randint(360, 450)} words. 
+    Text has to be {level} level, so it would not be hard for people at that level of language to read it.
+    Text also needed to contain ALL of these words: {words}.
+    Also let it will be only text in your response, nothing else"""
+
+
+def translate(word: str, language: str):
+    try:
+        result = Translator().translate(word, dest=language).text
+    except Exception:
+        result = "Проверьте текст на отсутствие опечаток и попробуйте снова."
+    return result
+
+
+class StartWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        f = io.StringIO(start_template)
+        uic.loadUi(f, self)
+
+        self.loadFileBtn.clicked.connect(self.load_file)
+        self.saveFileBtn.clicked.connect(self.save_file)
+
+    def load_file(self):
+        file_name = QFileDialog.getOpenFileName(self, 'Выберите файл:', '')[0]
+        if file_name:
+            with open(file_name) as nf:
+                self.setP.setPlainText(nf.read())
+
+    def save_file(self):
+        file_name = QFileDialog.getOpenFileName(self, 'Выберите файл:', '')[0]
+        if file_name:
+            with open(file_name, 'w') as nf:
+                nf.write(self.setP.toPlainText())
+
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -28,55 +70,67 @@ class MainWindow(QMainWindow):
 
         self.words_data = {}
         self.knowledge = {}
-        self.endw = None
+        self.end_window = None
 
         self.startBtn.clicked.connect(self.run)
         self.statBtn.clicked.connect(self.view_stat)
         self.checkTBtn.clicked.connect(self.check_translate)
         self.seeTBtn.clicked.connect(self.see_translate)
-        self.loadFileBtn.clicked.connect(self.load_file)
         self.endBtn.clicked.connect(self.end_train)
+        self.returnButton.clicked.connect(self.make_word_set)
 
     def run(self):
-        self.words_data = {word.split(' - ')[0]: set(word.split(' - ')[1].split(', ')) for word in
-                           self.setP.toPlainText().lower().split('\n')}
-        self.knowledge = {word: [0, 0] for word in self.words_data}
-        words = [word for word in self.words_data]
-        text = ask_ai(f"""Generate an english text (200-250 words) that will contain these words:
-                            {', '.join(words)}""")
+        self.textBrowser.setText("Приступаем к созданию нового текста...")
+        self.words_data = {word.split(' - ')[0]: set(word.split(' - ')[1].split(', '))
+                           for word in self.word_window.setP.toPlainText().lower().split('\n')}
+        self.words = [word for word in self.words_data]
+        text = ask_ai(prompt(str(self.lang_query.currentText()),
+                             str(self.lvl_query.currentText()), ', '.join(self.words)))
+        text = "\n\n".join(text.split("\n\n")[1:-1])
         self.textBrowser.setText(text)
 
     def view_stat(self):
-        self.endw = EndWindow()
-        self.endw.show()
+        self.end_window = EndWindow()
+        self.end_window.show()
+        print(self.knowledge)
         for word, kn in self.knowledge.items():
-            self.endw.statView.insertPlainText(
-                f"({'!' * int(3 - (kn[0] / max(kn[1], 1)) * 3)}) {word} - {round(kn[0] * 100 / max(kn[1], 1))}%\n")
+            marks = int(3 - (kn[0] / max(kn[1], 1)) * 3)
+            percentage = round(kn[0] * 100 / max(kn[1], 1))
+            self.end_window.statView.insertPlainText(f"{'!' * marks} {word} - {percentage}%\n")
 
     def check_translate(self):
-        self.knowledge[self.wordP.text().lower()][1] += 1
-        if (self.translateP.text().lower() in self.words_data[self.wordP.text().lower()] or
-                set(self.translateP.text().lower().split(', ')) == self.words_data[self.wordP.text().lower()]):
+        current_word = self.wordP.text().lower()
+        if current_word not in self.words:
+            self.statusLabel.setText("Такого слова нет в наборе.")
+            return
+
+        self.knowledge[current_word] = self.knowledge.get(current_word, [0, 0])
+        self.knowledge[current_word][1] += 1
+        if (self.translateP.text().lower() in self.words_data[current_word] or
+                set(self.translateP.text().lower().split(', ')) == self.words_data[current_word]):
             self.statusLabel.setText("Верный перевод! Так держать!")
-            self.knowledge[self.wordP.text().lower()][0] += 1
+            self.knowledge[current_word][0] += 1
         else:
             self.statusLabel.setText('Неверно, нажмите "посмотреть перевод".')
 
     def see_translate(self):
-        self.translateP.setText(', '.join(self.words_data[self.wordP.text().lower()]))
-
-    def load_file(self):
-        fname = QFileDialog.getOpenFileName(self, 'Выберите файл:', '')[0]
-        if fname:
-            with open(fname) as nf:
-                self.setP.setPlainText(nf.read())
+        self.statusLabel.clear()
+        if self.wordP.text().lower() in self.words_data:
+            text = ', '.join(self.words_data[self.wordP.text().lower()])
+        else:
+            text = translate(self.wordP.text().lower(), "ru")
+        self.translateP.setText(text)
 
     def end_train(self):
         ex.close()
         try:
-            self.endw.close()
+            self.end_window.close()
         except AttributeError:
             self.view_stat()
+
+    def make_word_set(self):
+        self.word_window = StartWindow()
+        self.word_window.show()
 
 
 class EndWindow(QMainWindow):

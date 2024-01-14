@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1178</width>
-    <height>895</height>
+    <width>1160</width>
+    <height>773</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>781</width>
-      <height>841</height>
+      <width>751</width>
+      <height>661</height>
      </rect>
     </property>
     <property name="font">
@@ -32,7 +32,7 @@
    <widget class="QLineEdit" name="wordP">
     <property name="geometry">
      <rect>
-      <x>800</x>
+      <x>780</x>
       <y>10</y>
       <width>371</width>
       <height>41</height>
@@ -47,32 +47,14 @@
      <string/>
     </property>
     <property name="placeholderText">
-     <string>Слово:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="translateP">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>60</y>
-      <width>371</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="placeholderText">
-     <string>Перевод:</string>
+     <string>Текст:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="checkTBtn">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>110</y>
+      <x>780</x>
+      <y>60</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -89,8 +71,8 @@
    <widget class="QPushButton" name="seeTBtn">
     <property name="geometry">
      <rect>
-      <x>990</x>
-      <y>110</y>
+      <x>970</x>
+      <y>60</y>
       <width>181</width>
       <height>41</height>
      </rect>
@@ -99,59 +81,10 @@
      <string>Посмотреть перевод</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="setP">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>280</y>
-      <width>371</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="placeholderText">
-     <string>Слово - перевод1, перевод2, ...</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>800</x>
-      <y>240</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Набор слов:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="loadFileBtn">
-    <property name="geometry">
-     <rect>
-      <x>990</x>
-      <y>230</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Загрузить файл</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="startBtn">
     <property name="geometry">
      <rect>
-      <x>800</x>
+      <x>780</x>
       <y>680</y>
       <width>371</width>
       <height>51</height>
@@ -169,8 +102,8 @@
    <widget class="QPushButton" name="statBtn">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>740</y>
+      <x>10</x>
+      <y>680</y>
       <width>371</width>
       <height>51</height>
      </rect>
@@ -184,11 +117,24 @@
      <string>Посмотреть статистику</string>
     </property>
    </widget>
+   <widget class="QLabel" name="statusLabel">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>420</y>
+      <width>371</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
    <widget class="QPushButton" name="endBtn">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>800</y>
+      <x>390</x>
+      <y>680</y>
       <width>371</width>
       <height>51</height>
      </rect>
@@ -202,17 +148,182 @@
      <string>Закончить тренировку</string>
     </property>
    </widget>
-   <widget class="QLabel" name="statusLabel">
+   <widget class="QComboBox" name="lang_query">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>160</y>
-      <width>371</width>
-      <height>41</height>
+      <x>870</x>
+      <y>560</y>
+      <width>281</width>
+      <height>51</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="currentText">
+     <string>English</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>English</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Italian</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Spanish</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Chinese (simplified)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>German</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>French</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>560</y>
+      <width>61</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
-     <string/>
+     <string>Язык:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>620</y>
+      <width>121</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Уровень:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="lvl_query">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>620</y>
+      <width>251</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="currentText">
+     <string>beginner</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>beginner</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>elementary</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>pre-intermediate</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>intermediate</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upper-intermediate</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>advanced</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QTextBrowser" name="translateP">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>110</y>
+      <width>371</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="placeholderText">
+     <string>Перевод:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="returnButton">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>490</y>
+      <width>371</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Редактировать набор слов</string>
     </property>
    </widget>
   </widget>
@@ -221,7 +332,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1178</width>
+     <width>1160</width>
      <height>18</height>
     </rect>
    </property>
