@@ -81,7 +81,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Сохранить файл</string>
+     <string>Сохранить в файл</string>
     </property>
    </widget>
   </widget>
