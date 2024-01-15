@@ -1,1 +1,3 @@
-PyQT5, googletrans, g4f
+PyQT5, googletrans, g4f, spacy
+
+Также обязательно "python -m spacy download en_core_web_sm" в терминале, подставив помимо en еще es, it, zh, de, fr.
