@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
             return
         # TODO: inform user about the text is generating
         self.words_data = {word.split(' - ')[0]: set(word.split(' - ')[1].split(', '))
-                           for word in self.start_window.setP.toPlainText().lower().split('\n')}
+                           for word in self.start_window.setP.toPlainText().lower().strip().split('\n')}
         self.words = [word for word in self.words_data]
         text = ask_ai(prompt(str(self.lang_query.currentText()),
                              str(self.lvl_query.currentText()), ', '.join(self.words)))
@@ -110,11 +110,9 @@ class MainWindow(QMainWindow):
     def view_stat(self):
         self.end_window = EndWindow()
         self.end_window.show()
-        print(self.knowledge)
         for word, kn in self.knowledge.items():
-            marks = int(3 - (kn[0] / max(kn[1], 1)) * 3)
             percentage = round(kn[0] * 100 / max(kn[1], 1))
-            self.end_window.statView.insertPlainText(f"{'!' * marks} {word} - {percentage}%\n")
+            self.end_window.statView.insertPlainText(f"{word} - {percentage}% ({kn[0]} из {kn[1]})\n")
 
     def check_translate(self):
         if self.words is None:
