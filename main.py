@@ -93,6 +93,8 @@ class MainWindow(QMainWindow):
         self.seeTBtn.clicked.connect(self.see_translate)
         self.endBtn.clicked.connect(self.end_train)
         self.returnButton.clicked.connect(self.make_word_set)
+        self.disagreeBtn.clicked.connect(self.disagree)
+        self.statusLabel.setText('Добро пожаловать!')
 
     def run(self):
         if self.start_window is None:
@@ -118,19 +120,19 @@ class MainWindow(QMainWindow):
         if self.words is None:
             self.statusLabel.setText("Набор слов отсутствует.")
             return
-        current_word = self.wordP.text().lower()
+        current_word = self.wordP.text().lower().strip()
         if current_word not in self.words:
-            self.statusLabel.setText("Такого слова нет в наборе.")
+            self.statusLabel.setText("Слова нет в наборе.")
             return
 
         self.knowledge[current_word] = self.knowledge.get(current_word, [0, 0])
         self.knowledge[current_word][1] += 1
         if (self.translateP.toPlainText().lower() in self.words_data[current_word] or
                 set(self.translateP.toPlainText().lower().split(', ')) == self.words_data[current_word]):
-            self.statusLabel.setText("Верный перевод! Так держать!")
+            self.statusLabel.setText("Верный перевод!\nТак держать!")
             self.knowledge[current_word][0] += 1
         else:
-            self.statusLabel.setText('Неверно, нажмите "посмотреть перевод".')
+            self.statusLabel.setText('Неверно, нажмите\n"посмотреть перевод".')
 
     def see_translate(self):
         self.statusLabel.clear()
@@ -138,7 +140,7 @@ class MainWindow(QMainWindow):
             text = ', '.join(self.words_data[self.wordP.text().lower()])
         else:
             base = to_usual_from(self.wordP.text().lower(), self.lang_query.currentText())
-            text = f"Перевод фразы: {translate(self.wordP.text().lower(), 'ru')}.\n\n\n"
+            text = f"{translate(self.wordP.text().lower(), 'ru')}\n\n\n"
             if base.lower() != self.wordP.text().lower() and self.wordP.text().lower().count(' ') <= 1:
                 text += f"Начальная форма (инфинитив): {base};\n\n"
                 text += f"Перевод: {translate(base, 'ru')}."
@@ -154,6 +156,16 @@ class MainWindow(QMainWindow):
     def make_word_set(self):
         self.start_window = StartWindow()
         self.start_window.show()
+
+    def disagree(self):
+        if self.statusLabel.text() != 'Неверно, нажмите\n"посмотреть перевод".':
+            self.statusLabel.setText("Нажмите, когда\nне согласны с оценкой.")
+        else:
+            if self.wordP.text().strip().lower() in self.knowledge:
+                self.knowledge[self.wordP.text().strip().lower()][0] += 1
+                self.statusLabel.setText("Перевод был\nзасчитан как верный.")
+            else:
+                self.statusLabel.setText("Слова нет. Не стирайте,\nесли хотите засчитать.")
 
 
 class EndWindow(QMainWindow):
